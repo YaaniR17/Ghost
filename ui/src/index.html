@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ghost AI</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- TITLE BAR -->
+  <div class="titlebar">
+    <div class="titlebar-left">
+      <div class="logo-icon">👻</div>
+      <div class="titlebar-title">GHOST <span>COMMAND CENTER</span></div>
+    </div>
+    <div class="titlebar-center">
+      <div class="system-status"><span class="dot green"></span> SYSTEM STATUS <strong>OPTIMAL</strong></div>
+      <div class="clock" id="clock">00:00:00</div>
+    </div>
+    <div class="titlebar-right">
+      <button class="win-btn" onclick="require('electron').remote?.getCurrentWindow().minimize()">─</button>
+      <button class="win-btn" onclick="require('electron').remote?.getCurrentWindow().maximize()">□</button>
+      <button class="win-btn close" onclick="require('electron').app?.quit() || window.close()">✕</button>
+    </div>
+  </div>
+
+  <div class="app">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <nav class="nav">
+        <div class="nav-item active">⊞ Command Center</div>
+        <div class="nav-item">⬡ AI Core</div>
+        <div class="nav-item">◈ Agents</div>
+        <div class="nav-item">☰ Tasks</div>
+        <div class="nav-item">◷ Calendar</div>
+        <div class="nav-item">⊙ Memory</div>
+        <div class="nav-item">◻ Conversations</div>
+      </nav>
+      <div class="voice-status-panel">
+        <div class="vs-title">VOICE STATUS</div>
+        <div class="waveform" id="waveform">
+          <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
+          <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
+          <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
+        </div>
+        <div class="vs-label" id="vs-label">Idle</div>
+        <button class="tap-btn" id="tapBtn">Tap to Speak</button>
+      </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main">
+
+      <!-- TOP ROW -->
+      <div class="top-row">
+
+        <!-- AI CORE OVERVIEW -->
+        <div class="panel ai-core-panel">
+          <div class="panel-title">AI CORE OVERVIEW</div>
+          <div class="core-item"><span class="core-icon cyan">⬡</span> AI Core <span class="badge green">Active</span></div>
+          <div class="core-item"><span class="core-icon purple">◈</span> Memory <span class="badge blue">Ready</span></div>
+          <div class="core-item"><span class="core-icon green">🎙</span> Voice <span class="badge green" id="voice-badge">Online</span></div>
+          <div class="core-item"><span class="core-icon orange">◎</span> Agents <span class="badge yellow">Standby</span></div>
+          <div class="core-item"><span class="core-icon blue">⊞</span> LLMs <span class="badge green">Connected</span></div>
+          <div class="core-item"><span class="core-icon green">⛊</span> System <span class="badge green">Optimal</span></div>
+        </div>
+
+        <!-- CENTER GLOBE -->
+        <div class="panel center-panel">
+          <div class="globe-container">
+            <div class="globe-ring ring1"></div>
+            <div class="globe-ring ring2"></div>
+            <div class="globe-ring ring3"></div>
+            <div class="globe-core">
+              <div class="ghost-title">GHOST</div>
+              <div class="ghost-sub">AI CORE</div>
+              <div class="ghost-ver">v1.0.0</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- LIVE FEED -->
+        <div class="panel feed-panel">
+          <div class="panel-title">CONVERSATION LOG <span class="live-dot">● LIVE</span></div>
+          <div class="feed-list" id="feedList">
+            <div class="feed-item">
+              <span class="feed-tag info">INFO</span>
+              <span class="feed-text">Ghost is online and ready.</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- MIDDLE ROW -->
+      <div class="mid-row">
+
+        <!-- SYSTEM MONITOR -->
+        <div class="panel sys-panel">
+          <div class="panel-title">SYSTEM MONITOR</div>
+          <div class="gauges">
+            <div class="gauge">
+              <div class="gauge-circle" id="cpuGauge">
+                <span id="cpuVal">0%</span>
+              </div>
+              <div class="gauge-label">CPU</div>
+            </div>
+            <div class="gauge">
+              <div class="gauge-circle" id="ramGauge">
+                <span id="ramVal">0%</span>
+              </div>
+              <div class="gauge-label">RAM</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TRANSCRIPT -->
+        <div class="panel transcript-panel">
+          <div class="panel-title">LAST EXCHANGE</div>
+          <div class="transcript-box">
+            <div class="t-label">YOU</div>
+            <div class="t-text" id="userText">—</div>
+            <div class="t-label" style="margin-top:12px">GHOST</div>
+            <div class="t-text" id="ghostText">—</div>
+          </div>
+        </div>
+
+        <!-- QUICK COMMANDS -->
+        <div class="panel quick-panel">
+          <div class="panel-title">QUICK COMMANDS</div>
+          <button class="quick-btn" onclick="sendText('What time is it?')">⏱ What time is it?</button>
+          <button class="quick-btn" onclick="sendText('Give me a system status report')">📊 System Status</button>
+          <button class="quick-btn" onclick="sendText('Tell me something interesting')">💡 Interesting Fact</button>
+          <button class="quick-btn" onclick="sendText('What can you help me with?')">❓ What can you do?</button>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div class="right-panel">
+      <div class="panel-title">LLM STATUS</div>
+      <div class="llm-item"><span class="llm-dot green"></span> Qwen2.5-Coder <span class="llm-status green">Connected</span></div>
+      <div class="llm-item"><span class="llm-dot grey"></span> Qwen3 <span class="llm-status grey">Standby</span></div>
+      <div class="llm-item"><span class="llm-dot grey"></span> Whisper <span class="llm-status green">Active</span></div>
+      <div class="llm-item"><span class="llm-dot grey"></span> Piper TTS <span class="llm-status green">Active</span></div>
+    </div>
+
+  </div>
+
+  <!-- BOTTOM VOICE BAR -->
+  <div class="voice-bar">
+    <div class="vb-left">
+      <span>🕐</span> <span id="vb-time">--:--</span>
+      <span style="margin-left:16px">🌐</span> <span>Network: Excellent</span>
+    </div>
+    <div class="vb-center">
+      <div class="talk-btn-wrap" id="talkWrap">
+        <div class="talk-waveform" id="talkWave">
+          <span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <button class="talk-btn" id="talkBtn">🎙 TALK TO GHOST</button>
+        <div class="talk-status" id="talkStatus">Click to speak</div>
+      </div>
+    </div>
+    <div class="vb-right">
+      <button class="focus-btn">◎ Focus Mode</button>
+    </div>
+  </div>
+
+  <script src="renderer.js"></script>
+</body>
+</html>
